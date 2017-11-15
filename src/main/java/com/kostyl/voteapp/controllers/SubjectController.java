@@ -19,7 +19,7 @@ import com.kostyl.voteapp.entity.Subject;
 import com.kostyl.voteapp.services.SubjectService;
 
 @RestController()
-@RequestMapping("/subjects")
+@RequestMapping("/api/subjects")
 public class SubjectController {
 	private SubjectService subjectService;
 

@@ -8,4 +8,5 @@ import com.kostyl.voteapp.entity.Poll;
 public interface PollService {
 	Poll startPoll(Poll poll);
 	Poll getPoll(String link);
+	List<Poll> getAllPolls();
 }

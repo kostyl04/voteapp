@@ -59,4 +59,10 @@ public class PollServiceImpl implements PollService {
 		return generatedLink;
 	}
 
+	@Override
+	public List<Poll> getAllPolls() {
+		// TODO Auto-generated method stub
+		return (List<Poll>) pollDao.findAll();
+	}
+
 }

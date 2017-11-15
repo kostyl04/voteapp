@@ -19,7 +19,7 @@ import com.kostyl.voteapp.entity.Poll;
 import com.kostyl.voteapp.services.PollService;
 
 @RestController
-@RequestMapping("/polls")
+@RequestMapping("/api/polls")
 public class PollController {
 	@Autowired
 	private PollService pollService;
@@ -27,7 +27,7 @@ public class PollController {
 	@GetMapping(value = "/", consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE }, produces = {
 			MediaType.APPLICATION_JSON_UTF8_VALUE })
 	public List<Poll> getPolls() {
-		return null;
+		return pollService.getAllPolls();
 	}
 
 	@GetMapping(value = "/{pollLink}", consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE }, produces = {
@@ -39,7 +39,7 @@ public class PollController {
 	@PostMapping(value = "/start", consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE }, produces = {
 			MediaType.APPLICATION_JSON_UTF8_VALUE })
 	public ResponseEntity<?> startPoll(@RequestBody Poll poll, UriComponentsBuilder ucBuilder) {
-		pollService.startPoll(poll);
+		poll=pollService.startPoll(poll);
 
 		return new ResponseEntity<String>(
 				ucBuilder.path("/polls/{link}").buildAndExpand(poll.getLink()).toUri().toString(), HttpStatus.CREATED);
