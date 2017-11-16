@@ -5,9 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import com.kostyl.voteapp.entity.Answer;
 import com.kostyl.voteapp.entity.Poll;
 
-public interface PollDao extends CrudRepository<Poll, Long> {
-	Poll findPollByLink(String link);
-
-	Answer findByIdAndAnswersName(Long id, String name);
+public interface AnswersDao extends CrudRepository<Answer, Long> {
+	Answer findByNameAndPollId(String name, Long pollId);
 
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.kostyl.voteapp.dal.AnswersDao;
 import com.kostyl.voteapp.dal.PollDao;
 import com.kostyl.voteapp.entity.Answer;
 import com.kostyl.voteapp.entity.Poll;
@@ -22,6 +23,8 @@ public class PollServiceImpl implements PollService {
 	private SubjectService subjectService;
 	@Autowired
 	private PollDao pollDao;
+	@Autowired
+	private AnswersDao answersDao;
 
 	@Override
 	public Poll startPoll(Poll poll) {
@@ -63,6 +66,19 @@ public class PollServiceImpl implements PollService {
 	public List<Poll> getAllPolls() {
 		// TODO Auto-generated method stub
 		return (List<Poll>) pollDao.findAll();
+	}
+
+	@Override
+	public Poll closePoll(Long id) {
+		Poll poll = pollDao.findOne(id);
+		poll.setClosed(true);
+		return poll;
+	}
+
+	@Override
+	public void vote(Long pollId, String answerName) {
+		answersDao.findByNameAndPollId(answerName, pollId).incrementVotes();
+
 	}
 
 }

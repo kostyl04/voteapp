@@ -3,6 +3,7 @@ package com.kostyl.voteapp.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,7 @@ public class PollController {
 	@PostMapping(value = "/start", consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE }, produces = {
 			MediaType.APPLICATION_JSON_UTF8_VALUE })
 	public ResponseEntity<?> startPoll(@RequestBody Poll poll, UriComponentsBuilder ucBuilder) {
-		poll=pollService.startPoll(poll);
+		poll = pollService.startPoll(poll);
 
 		return new ResponseEntity<String>(
 				ucBuilder.path("/polls/{link}").buildAndExpand(poll.getLink()).toUri().toString(), HttpStatus.CREATED);
@@ -47,13 +48,20 @@ public class PollController {
 
 	@PutMapping(value = "/{pollId}/answers/{answerName}/vote", consumes = {
 			MediaType.APPLICATION_JSON_UTF8_VALUE }, produces = { MediaType.APPLICATION_JSON_UTF8_VALUE })
-	public ResponseEntity<?> vote(@PathVariable Long pollId, @PathVariable String answerName) {
-		return null;
+	public ResponseEntity<?> vote(@PathVariable Long pollId, @PathVariable String answerName,
+			UriComponentsBuilder ucBuilder) {
+
+		pollService.vote(pollId, answerName);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 	@PutMapping(value = "/{pollId}", consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE }, produces = {
 			MediaType.APPLICATION_JSON_UTF8_VALUE })
-	public ResponseEntity<?> closePoll(@PathVariable Long pollId) {
-		return null;
+	public ResponseEntity<?> closePoll(@PathVariable Long pollId, UriComponentsBuilder ucBuilder) {
+		Poll poll = pollService.closePoll(pollId);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(ucBuilder.path("/polls/{id}").buildAndExpand(poll.getId()).toUri());
+		return new ResponseEntity<String>(headers, HttpStatus.OK);
+
 	}
 }

@@ -21901,6 +21901,10 @@
 	
 	var _Poll2 = _interopRequireDefault(_Poll);
 	
+	var _PollInfo = __webpack_require__(229);
+	
+	var _PollInfo2 = _interopRequireDefault(_PollInfo);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -21929,7 +21933,8 @@
 	                    null,
 	                    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _Home2.default }),
 	                    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/subjects', component: _Subject2.default }),
-	                    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/polls', component: _Poll2.default })
+	                    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/polls', component: _Poll2.default }),
+	                    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/polls/:pollLink', component: _PollInfo2.default })
 	                )
 	            );
 	        }
@@ -36146,7 +36151,7 @@
 	                url: "http://localhost:8080/api/polls/",
 	                method: "GET",
 	                contentType: "application/json"
-	            }).done(function (data) {
+	            }).then(function (data) {
 	                self.setState({ polls: data });
 	            });
 	        }
@@ -36164,7 +36169,22 @@
 	                        null,
 	                        'Polls:'
 	                    ),
-	                    React.createElement(PollList, { polls: this.state.polls })
+	                    React.createElement(
+	                        'div',
+	                        { className: 'col-xs-6 text-center lead   ' },
+	                        'title'
+	                    ),
+	                    React.createElement(
+	                        'div',
+	                        { className: 'col-xs-2 text-center lead   ' },
+	                        'status'
+	                    ),
+	                    React.createElement(
+	                        'div',
+	                        { className: 'col-xs-4 text-center lead   ' },
+	                        'link'
+	                    ),
+	                    React.createElement(PollList, { onClose: this.loadPolls, polls: this.state.polls })
 	                ),
 	                React.createElement(
 	                    'div',
@@ -36190,8 +36210,10 @@
 	    _createClass(PollList, [{
 	        key: 'render',
 	        value: function render() {
+	            var _this3 = this;
+	
 	            var polls = this.props.polls.map(function (poll) {
-	                return React.createElement(Poll, { key: poll.id, poll: poll });
+	                return React.createElement(Poll, { onClose: _this3.props.onClose, key: poll.id, poll: poll });
 	            });
 	            return React.createElement(
 	                'div',
@@ -36210,26 +36232,67 @@
 	    function Poll(props) {
 	        _classCallCheck(this, Poll);
 	
-	        return _possibleConstructorReturn(this, (Poll.__proto__ || Object.getPrototypeOf(Poll)).call(this, props));
+	        var _this4 = _possibleConstructorReturn(this, (Poll.__proto__ || Object.getPrototypeOf(Poll)).call(this, props));
+	
+	        _this4.closePoll = _this4.closePoll.bind(_this4);
+	
+	        return _this4;
 	    }
 	
 	    _createClass(Poll, [{
+	        key: 'closePoll',
+	        value: function closePoll(id) {
+	            var self = this;
+	            _jquery2.default.ajax({
+	                url: "http://localhost:8080/api/polls/" + id,
+	                method: "PUT",
+	                contentType: "application/json"
+	            }).then(function (data) {
+	                self.props.onClose();
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var _this5 = this;
+	
 	            console.dir(this.props.poll);
 	
 	            var link = "/polls/" + this.props.poll.link;
+	            var status = void 0;
+	            if (this.props.poll.closed) {
+	                status = React.createElement(
+	                    'div',
+	                    { className: 'col-xs-4 text-center' },
+	                    'closed'
+	                );
+	            } else {
+	                status = React.createElement(
+	                    'div',
+	                    { className: 'col-xs-4 text-center' },
+	                    'active ',
+	                    React.createElement(
+	                        'span',
+	                        { onClick: function onClick() {
+	                                return _this5.closePoll(_this5.props.poll.id);
+	                            }, className: 'badge', style: { cursor: 'pointer' } },
+	                        'close'
+	                    )
+	                );
+	            }
+	
 	            return React.createElement(
 	                'div',
 	                { className: 'row' },
 	                React.createElement(
 	                    'div',
-	                    { className: 'col-xs-6 text-center' },
+	                    { className: 'col-xs-4 text-center' },
 	                    this.props.poll.subject.title
 	                ),
+	                status,
 	                React.createElement(
 	                    'div',
-	                    { className: 'col-xs-6 text-center' },
+	                    { className: 'col-xs-4 text-center' },
 	                    React.createElement(
 	                        'a',
 	                        { href: link },
@@ -36249,14 +36312,14 @@
 	    function StartPollForm(props) {
 	        _classCallCheck(this, StartPollForm);
 	
-	        var _this4 = _possibleConstructorReturn(this, (StartPollForm.__proto__ || Object.getPrototypeOf(StartPollForm)).call(this, props));
+	        var _this6 = _possibleConstructorReturn(this, (StartPollForm.__proto__ || Object.getPrototypeOf(StartPollForm)).call(this, props));
 	
-	        _this4.state = { subjectList: [], newPoll: { answers: [], subject: {} } };
-	        _this4.loadSubjects = _this4.loadSubjects.bind(_this4);
-	        _this4.onSubjectChange = _this4.onSubjectChange.bind(_this4);
-	        _this4.onAnswerAdd = _this4.onAnswerAdd.bind(_this4);
-	        _this4.startPoll = _this4.startPoll.bind(_this4);
-	        return _this4;
+	        _this6.state = { subjectList: [], newPoll: { answers: [], subject: {} }, error: null, message: null };
+	        _this6.loadSubjects = _this6.loadSubjects.bind(_this6);
+	        _this6.onSubjectChange = _this6.onSubjectChange.bind(_this6);
+	        _this6.onAnswerAdd = _this6.onAnswerAdd.bind(_this6);
+	        _this6.startPoll = _this6.startPoll.bind(_this6);
+	        return _this6;
 	    }
 	
 	    _createClass(StartPollForm, [{
@@ -36275,22 +36338,36 @@
 	        value: function onAnswerAdd(e) {
 	            this.state.newPoll.answers.push({ name: (0, _jquery2.default)("#answerInput").val() });
 	            (0, _jquery2.default)("#answerInput").val('');
+	            this.state.message = null;
+	            if (this.state.newPoll.answers.length >= 2) this.state.error = null;
 	            this.setState(this.state);
 	        }
 	    }, {
 	        key: 'startPoll',
 	        value: function startPoll() {
 	            var self = this;
-	            _jquery2.default.ajax({
-	                url: "http://localhost:8080/api/polls/start",
-	                method: "POST",
-	                contentType: "application/json",
-	                data: JSON.stringify(self.state.newPoll)
-	            }).done(function (data) {
-	                self.props.onStart();
-	            });
-	            this.state.newPoll.answers = [];
-	            this.setState(this.state);
+	            if (self.state.newPoll.answers.length < 2) {
+	
+	                this.state.error = "Add atleast 2 answers!";
+	                this.setState(this.state);
+	            } else {
+	                _jquery2.default.ajax({
+	                    url: "http://localhost:8080/api/polls/start",
+	                    method: "POST",
+	                    contentType: "application/json",
+	                    data: JSON.stringify(self.state.newPoll),
+	                    statusCode: {
+	                        201: function _(data) {
+	                            console.log("okay");
+	                            self.props.onStart();
+	                            self.state.message = 'Poll has been started!';
+	                            self.setState(self.state);
+	                        }
+	                    }
+	                });
+	                this.state.newPoll.answers = [];
+	                this.setState(this.state);
+	            }
 	        }
 	    }, {
 	        key: 'loadSubjects',
@@ -36300,9 +36377,10 @@
 	                url: "http://localhost:8080/api/subjects/",
 	                method: "GET",
 	                contentType: "application/json"
-	            }).done(function (data) {
+	            }).then(function (data) {
 	                self.state.subjectList = data;
 	                self.state.newPoll.subject.id = data[0].id;
+	
 	                self.setState(self.state);
 	            });
 	        }
@@ -36327,9 +36405,13 @@
 	                null,
 	                React.createElement('input', { type: 'text', id: 'answerInput', className: 'form-control' }),
 	                React.createElement(
-	                    'button',
-	                    { onClick: this.onAnswerAdd, className: 'btn btn-primary' },
-	                    'add'
+	                    'div',
+	                    { className: 'row text-center' },
+	                    React.createElement(
+	                        'button',
+	                        { onClick: this.onAnswerAdd, className: 'btn btn-primary' },
+	                        'add'
+	                    )
 	                )
 	            );
 	            var answers = this.state.newPoll.answers.map(function (answer, i) {
@@ -36339,6 +36421,8 @@
 	                    answer.name
 	                );
 	            });
+	            var errors = this.state.error == null ? false : true;
+	            console.log(errors);
 	            return React.createElement(
 	                'div',
 	                null,
@@ -36367,6 +36451,11 @@
 	                    ),
 	                    answerInput
 	                ),
+	                errors ? React.createElement(
+	                    'div',
+	                    { className: 'row alert alert-danger text-center' },
+	                    this.state.error
+	                ) : '',
 	                React.createElement(
 	                    'div',
 	                    { className: 'row' },
@@ -36380,28 +36469,207 @@
 	                        { onClick: this.startPoll, className: 'btn btn-success' },
 	                        'Start poll'
 	                    )
-	                )
+	                ),
+	                this.state.message != null ? React.createElement(
+	                    'div',
+	                    { className: 'row text-center alert alert-success' },
+	                    this.state.message
+	                ) : ''
 	            );
 	        }
 	    }]);
 	
 	    return StartPollForm;
 	}(React.Component);
-	/*class PollAnswer extends React.Component {
-	    constructor( props ) {
-	        super( props );
-	    }
-	    render() {
-	        let voteBtn = this.props.answer.isActive ? <div className="col-xs-3"><button className="btn btn-primary"  >Vote!</button></div> : null;
-	        return <div className="row">
-	            <div className="col-xs-5">{this.props.answer.name}</div>
-	            <div className="col-xs-4">{this.props.answer.votes}</div>
-	            {voteBtn}
-	        </div>
-	    }
-	}*/
 	
 	exports.default = PollPage;
+
+/***/ }),
+/* 229 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _jquery = __webpack_require__(227);
+	
+	var _jquery2 = _interopRequireDefault(_jquery);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(37);
+	
+	var PollInfo = function (_React$Component) {
+	    _inherits(PollInfo, _React$Component);
+	
+	    function PollInfo(props) {
+	        _classCallCheck(this, PollInfo);
+	
+	        var _this = _possibleConstructorReturn(this, (PollInfo.__proto__ || Object.getPrototypeOf(PollInfo)).call(this, props));
+	
+	        console.dir(_this.props);
+	        _this.state = { selectedAnswer: undefined };
+	        _this.loadPoll = _this.loadPoll.bind(_this);
+	        _this.selectAnswer = _this.selectAnswer.bind(_this);
+	        _this.vote = _this.vote.bind(_this);
+	        return _this;
+	    }
+	
+	    _createClass(PollInfo, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            this.loadPoll();
+	        }
+	    }, {
+	        key: 'selectAnswer',
+	        value: function selectAnswer(answer) {
+	            this.state.selectedAnswer = answer;
+	            this.setState(this.state);
+	        }
+	    }, {
+	        key: 'vote',
+	        value: function vote() {
+	            var self = this;
+	            var link = "http://localhost:8080/api/polls/" + self.state.selectedAnswer.pollId + "/answers/" + self.state.selectedAnswer.name + "/vote";
+	            _jquery2.default.ajax({
+	                url: link,
+	                method: "PUT",
+	                contentType: "application/json"
+	            }).then(function (data) {
+	
+	                self.state.selectedAnswer = undefined;
+	                self.loadPoll();
+	            });
+	        }
+	    }, {
+	        key: 'loadPoll',
+	        value: function loadPoll() {
+	            var self = this;
+	            var link = "http://localhost:8080/api/polls/" + self.props.match.params.pollLink;
+	            _jquery2.default.ajax({
+	                url: link,
+	                method: "GET",
+	                contentType: "application/json"
+	            }).then(function (data) {
+	                self.state.poll = data;
+	                self.setState(self.state);
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+	
+	            if (this.state.poll) {
+	                var answerTable = void 0;
+	                var answerSelect = void 0;
+	
+	                var self = this;
+	                var answersNames = [];
+	                var answersVotes = [];
+	                var _iteratorNormalCompletion = true;
+	                var _didIteratorError = false;
+	                var _iteratorError = undefined;
+	
+	                try {
+	                    var _loop = function _loop() {
+	                        var answer = _step.value;
+	
+	                        var clName = '';
+	                        if (_this2.state.selectedAnswer && answer == _this2.state.selectedAnswer) clName = "bg-primary";
+	                        answersNames.push(React.createElement(
+	                            'td',
+	                            { className: clName, onClick: !_this2.state.poll.closed ? function () {
+	                                    return _this2.selectAnswer(answer);
+	                                } : null, key: answer.id },
+	                            answer.name
+	                        ));
+	                        answersVotes.push(React.createElement(
+	                            'td',
+	                            { className: clName, onClick: !_this2.state.poll.closed ? function () {
+	                                    return _this2.selectAnswer(answer);
+	                                } : null, key: answer.id },
+	                            answer.votes
+	                        ));
+	                    };
+	
+	                    for (var _iterator = this.state.poll.answers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                        _loop();
+	                    }
+	                } catch (err) {
+	                    _didIteratorError = true;
+	                    _iteratorError = err;
+	                } finally {
+	                    try {
+	                        if (!_iteratorNormalCompletion && _iterator.return) {
+	                            _iterator.return();
+	                        }
+	                    } finally {
+	                        if (_didIteratorError) {
+	                            throw _iteratorError;
+	                        }
+	                    }
+	                }
+	
+	                var voteBtn = this.state.selectedAnswer ? React.createElement(
+	                    'button',
+	                    { className: 'btn btn-success', onClick: function onClick() {
+	                            return _this2.vote();
+	                        } },
+	                    'Vote!'
+	                ) : null;
+	                var closed = null;
+	                if (this.state.poll.closed) closed = '(closed)';
+	
+	                return React.createElement(
+	                    'div',
+	                    { className: 'text-center' },
+	                    React.createElement(
+	                        'div',
+	                        { className: 'lead' },
+	                        this.state.poll.subject.title,
+	                        closed
+	                    ),
+	                    React.createElement(
+	                        'table',
+	                        { className: 'table table-striped table-bordered table-hovered' },
+	                        React.createElement(
+	                            'tbody',
+	                            null,
+	                            React.createElement(
+	                                'tr',
+	                                null,
+	                                answersNames
+	                            ),
+	                            React.createElement(
+	                                'tr',
+	                                null,
+	                                answersVotes
+	                            )
+	                        )
+	                    ),
+	                    voteBtn
+	                );
+	            } else return React.createElement('div', null);
+	        }
+	    }]);
+	
+	    return PollInfo;
+	}(React.Component);
+	
+	exports.default = PollInfo;
 
 /***/ })
 /******/ ]);
