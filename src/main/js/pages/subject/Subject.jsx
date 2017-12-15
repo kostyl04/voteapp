@@ -9,7 +9,7 @@ class SubjectPage extends React.Component {
 
     constructor( props ) {
         super( props );
-        console.dir(this.props);
+        console.dir( this.props );
         this.state = { subjects: [] };
         this.loadSubjects = this.loadSubjects.bind( this );
     }
@@ -31,9 +31,9 @@ class SubjectPage extends React.Component {
     render() {
         return (
             <div className="row">
-                <div className="col-xs-6">
+                <div className="col-sm-6">
                     <SubjectList subjects={this.state.subjects} />
-                </div> <div className="col-xs-6">
+                </div> <div className="col-sm-6">
                     <SubjectAddingForm onCreate={this.loadSubjects} /></div></div>
         )
     }
@@ -91,11 +91,11 @@ class SubjectAddingForm extends React.Component {
         return (
             <form className="form" onSubmit={this.onSubmit}>
                 <div className="row form-group">
-                    <div className="col-xs-3">
-                        <label className="control-label"> title:</label></div><div className="col-xs-9"><input type="text" value={this.state.subject.title} className="form-control" name="name" onChange={this.onTitleChange} />
+                    <div className="col-sm-3">
+                        <label className="control-label"> title:</label></div><div className="col-sm-9"><input type="text" value={this.state.subject.title} className="form-control" name="name" onChange={this.onTitleChange} />
                     </div></div>
                 <div className="row">
-                    <div className="col-xs-4 col-xs-offset-8">
+                    <div className="col-sm-4 col-sm-offset-8">
                         <input type="submit" className="btn btn-success " value="create" /></div></div>
             </form>
 

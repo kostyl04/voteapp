@@ -30,14 +30,14 @@ class PollPage extends React.Component {
     }
     render() {
         return ( <div>
-            <div className="col-xs-6 text-center">
+            <div className="col-sm-6 text-center">
                 <h2>Polls:</h2>
-                <div className="col-xs-6 text-center lead   ">title</div>
-                <div className="col-xs-2 text-center lead   ">status</div>
-                <div className="col-xs-4 text-center lead   ">link</div>
+                <div className="col-sm-6 text-center lead   ">title</div>
+                <div className="col-sm-2 text-center lead   ">status</div>
+                <div className="col-sm-4 text-center lead   ">link</div>
                 <PollList onClose={this.loadPolls} polls={this.state.polls} />
             </div>
-            <div className="col-xs-6 text-center">
+            <div className="col-sm-6 text-center">
                 <StartPollForm onStart={this.loadPolls} />
             </div></div>
         )
@@ -77,16 +77,16 @@ class Poll extends React.Component {
         let link = "/polls/" + this.props.poll.link;
         let status;
         if ( this.props.poll.closed ) {
-            status = <div className="col-xs-4 text-center">closed</div>;
+            status = <div className="col-sm-4 text-center">closed</div>;
         } else{
-            status = <div className="col-xs-4 text-center">active <span  onClick={() => this.closePoll( this.props.poll.id )} className="badge" style={{cursor:'pointer'}}>close</span ></div>;
+            status = <div className="col-sm-4 text-center">active <span  onClick={() => this.closePoll( this.props.poll.id )} className="badge" style={{cursor:'pointer'}}>close</span ></div>;
         }
            
 
         return <div className="row">
-            <div className="col-xs-4 text-center">{this.props.poll.subject.title}</div>
+            <div className="col-sm-4 text-center">{this.props.poll.subject.title}</div>
             {status}
-            <div className="col-xs-4 text-center"><a href={link}>go to poll</a></div>
+            <div className="col-sm-4 text-center"><a href={link}>go to poll</a></div>
         </div>;
 
     }

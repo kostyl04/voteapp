@@ -25663,13 +25663,13 @@
 	                { className: 'row' },
 	                React.createElement(
 	                    'div',
-	                    { className: 'col-xs-6' },
+	                    { className: 'col-sm-6' },
 	                    React.createElement(SubjectList, { subjects: this.state.subjects })
 	                ),
 	                ' ',
 	                React.createElement(
 	                    'div',
-	                    { className: 'col-xs-6' },
+	                    { className: 'col-sm-6' },
 	                    React.createElement(SubjectAddingForm, { onCreate: this.loadSubjects })
 	                )
 	            );
@@ -25775,7 +25775,7 @@
 	                    { className: 'row form-group' },
 	                    React.createElement(
 	                        'div',
-	                        { className: 'col-xs-3' },
+	                        { className: 'col-sm-3' },
 	                        React.createElement(
 	                            'label',
 	                            { className: 'control-label' },
@@ -25784,7 +25784,7 @@
 	                    ),
 	                    React.createElement(
 	                        'div',
-	                        { className: 'col-xs-9' },
+	                        { className: 'col-sm-9' },
 	                        React.createElement('input', { type: 'text', value: this.state.subject.title, className: 'form-control', name: 'name', onChange: this.onTitleChange })
 	                    )
 	                ),
@@ -25793,7 +25793,7 @@
 	                    { className: 'row' },
 	                    React.createElement(
 	                        'div',
-	                        { className: 'col-xs-4 col-xs-offset-8' },
+	                        { className: 'col-sm-4 col-sm-offset-8' },
 	                        React.createElement('input', { type: 'submit', className: 'btn btn-success ', value: 'create' })
 	                    )
 	                )
@@ -36163,7 +36163,7 @@
 	                null,
 	                React.createElement(
 	                    'div',
-	                    { className: 'col-xs-6 text-center' },
+	                    { className: 'col-sm-6 text-center' },
 	                    React.createElement(
 	                        'h2',
 	                        null,
@@ -36171,24 +36171,24 @@
 	                    ),
 	                    React.createElement(
 	                        'div',
-	                        { className: 'col-xs-6 text-center lead   ' },
+	                        { className: 'col-sm-6 text-center lead   ' },
 	                        'title'
 	                    ),
 	                    React.createElement(
 	                        'div',
-	                        { className: 'col-xs-2 text-center lead   ' },
+	                        { className: 'col-sm-2 text-center lead   ' },
 	                        'status'
 	                    ),
 	                    React.createElement(
 	                        'div',
-	                        { className: 'col-xs-4 text-center lead   ' },
+	                        { className: 'col-sm-4 text-center lead   ' },
 	                        'link'
 	                    ),
 	                    React.createElement(PollList, { onClose: this.loadPolls, polls: this.state.polls })
 	                ),
 	                React.createElement(
 	                    'div',
-	                    { className: 'col-xs-6 text-center' },
+	                    { className: 'col-sm-6 text-center' },
 	                    React.createElement(StartPollForm, { onStart: this.loadPolls })
 	                )
 	            );
@@ -36263,13 +36263,13 @@
 	            if (this.props.poll.closed) {
 	                status = React.createElement(
 	                    'div',
-	                    { className: 'col-xs-4 text-center' },
+	                    { className: 'col-sm-4 text-center' },
 	                    'closed'
 	                );
 	            } else {
 	                status = React.createElement(
 	                    'div',
-	                    { className: 'col-xs-4 text-center' },
+	                    { className: 'col-sm-4 text-center' },
 	                    'active ',
 	                    React.createElement(
 	                        'span',
@@ -36286,13 +36286,13 @@
 	                { className: 'row' },
 	                React.createElement(
 	                    'div',
-	                    { className: 'col-xs-4 text-center' },
+	                    { className: 'col-sm-4 text-center' },
 	                    this.props.poll.subject.title
 	                ),
 	                status,
 	                React.createElement(
 	                    'div',
-	                    { className: 'col-xs-4 text-center' },
+	                    { className: 'col-sm-4 text-center' },
 	                    React.createElement(
 	                        'a',
 	                        { href: link },
